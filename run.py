@@ -1,5 +1,6 @@
 from flask import Flask, render_template, g, jsonify, request,url_for, send_from_directory, redirect
 from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
 import threading
 import time
 import sqlite3
@@ -17,6 +18,21 @@ app= Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 app.config['JSON_AS_ASCII'] = False
+app.config['SQLALCHEMY_DATABASE_URI']='postgres://pgprhthxmmarvv:b36bd1589359be1bc14a77624127df36642b1a0e9ba99f1b89d119127acf0820@ec2-34-197-188-147.compute-1.amazonaws.com:5432/d2j2ikeeva1t7n'
+
+db = SQLAlchemy(app)
+class students(db.Model):
+	id = db.Column('student_id', db.Integer, primary_key = True)
+	name = db.Column(db.String(100))
+	city = db.Column(db.String(50))  
+	addr = db.Column(db.String(200))
+	pin = db.Column(db.String(10))
+	def __init__(self, name, city, addr,pin):
+		self.name = name
+		self.city = city
+		self.addr = addr
+		self.pin = pin
+
 
 #print (DATABASE)
 def get_db():
@@ -93,8 +109,28 @@ def favicon():
 	return send_from_directory(os.path.join(app.root_path, 'static','favicon'),'favicon.ico')
 
 
+@app.route('/new', methods = ['GET', 'POST'])
+def new():
+   if request.method == 'POST':
+      if not request.form['name'] or not request.form['city'] or not request.form['addr']:
+         flash('Please enter all the fields', 'error')
+      else:
+         student = students(request.form['name'], request.form['city'],
+            request.form['addr'], request.form['pin'])
+         
+         db.session.add(student)
+         db.session.commit()
+         
+         return redirect(url_for('show_all'))
+   return render_template('new.html')
+
+@app.route('/showall')
+def show_all():
+   return render_template('show_all.html', students = students.query.all() )
+
+
 if __name__ == '__main__':
-	context = ('cert.pem','key.pem')
-	app.run(debug=True, host='0.0.0.0',ssl_context=context)
+	db.create_all()
+	app.run(debug=True, host='0.0.0.0')
 
 
