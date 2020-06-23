@@ -1,0 +1,6 @@
+gunicorn
+flask
+pyqrcode
+Jinja2
+pypng
+flask_script

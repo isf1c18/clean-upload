@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QR code scan</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+    <script type="text/javascript" src="{{url_for('static',filename='js/html5-qrcode.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static',filename='js/jquery-3.5.0.js')}}"></script>
+  </head>
+  <body>
+    <div style="width: 500px" id="reader"></div>
+    <iframe id = "scaned" style="width:500px; height:500px"></iframe>
+
+    <script type="text/javascript" >
+
+    function onScanSuccess(qrCodeMessage) {
+	    // handle on success condition with the decoded message
+      console.log('/user/'+qrCodeMessage);
+      $('#scaned').attr('src','/user/'+qrCodeMessage);
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+      html5QrcodeScanner.render(onScanSuccess);
+    </script>
+  </body>
+</html>

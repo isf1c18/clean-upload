@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>線上證照查詢</title>
+  
+  
+  
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+  <script src = "{{ url_for('static', filename='js/jquery-3.5.0.js')}}"></script>
+  <script src = "{{ url_for('static', filename='js/html2canvas.min.js')}}"></script>
+</head>
+
+<body>
+ <div class = "licenceborder" id="licence">
+<span>姓名：{{name}}<br>證照編號：{{id}}</span> 
+<img class = "photo" src="/img/{{photo}}"><br>
+<img class = "qrcode" src="/qr/{{timestamp}}">
+</div>
+
+  
+<script>
+
+html2canvas(document.querySelector(".licenceborder")).then(canvas => {
+    document.body.appendChild(canvas)
+});
+
+var x = document.getElementById("licence");
+x.style.display="none";
+
+
+</script>
+      
+</body>
+</html>
