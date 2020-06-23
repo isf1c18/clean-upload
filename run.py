@@ -18,7 +18,7 @@ app= Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 app.config['JSON_AS_ASCII'] = False
-app.config['SQLALCHEMY_DATABASE_URI']='postgres://pgprhthxmmarvv:b36bd1589359be1bc14a77624127df36642b1a0e9ba99f1b89d119127acf0820@ec2-34-197-188-147.compute-1.amazonaws.com:5432/d2j2ikeeva1t7n'
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get("DATABASE_URL") 
 
 db = SQLAlchemy(app)
 class students(db.Model):
