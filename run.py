@@ -20,6 +20,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
 app.config['JSON_AS_ASCII'] = False
 app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE_URL')
 
+
 db = SQLAlchemy(app)
 class students(db.Model):
 	id = db.Column('student_id', db.Integer, primary_key = True)
